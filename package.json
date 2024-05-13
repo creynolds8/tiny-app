@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/creynolds8/tiny-app#readme",
   "dependencies": {
+    "ejs": "^3.1.10",
     "express": "^4.19.2"
   }
 }
