@@ -67,7 +67,9 @@ app.get('/urls/:id', (req, res) => {
 
 // add route to POST url changes
 app.post('/urls/:id', (req, res) => {
+  if (req.body.longURL) {
   urlDatabase[req.params.id] = req.body.longURL;
+  };
   res.redirect('/urls')
 })
 
