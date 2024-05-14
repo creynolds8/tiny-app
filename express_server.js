@@ -46,7 +46,6 @@ app.get('/urls', (req, res) => {
 app.post('/urls', (req, res) => {
   let key = generateRandomString(str)
   urlDatabase[key] = req.body.longURL;
-  console.log(urlDatabase);
   res.redirect(`/urls/${key}`)
 });
 
@@ -64,6 +63,13 @@ app.get('/urls/new', (req, res) => {
 app.get('/urls/:id', (req, res) => {
   const templateVars = { id: req.params.id, longURL: urlDatabase[req.params.id] };
   res.render('urls_show', templateVars);
+});
+
+// add post route to delete urls
+app.post('/urls/:id/delete', (req, res) => {
+  console.log(urlDatabase[req.params.id]);
+  delete urlDatabase[req.params.id];
+  res.redirect('/urls');
 });
 
 // add redirect link for short url
