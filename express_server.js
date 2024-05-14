@@ -65,7 +65,13 @@ app.get('/urls/:id', (req, res) => {
   res.render('urls_show', templateVars);
 });
 
-// add post route to delete urls
+// add route to POST url changes
+app.post('/urls/:id', (req, res) => {
+  urlDatabase[req.params.id] = req.body.longURL;
+  res.redirect('/urls')
+})
+
+// add POST route to delete urls
 app.post('/urls/:id/delete', (req, res) => {
   console.log(urlDatabase[req.params.id]);
   delete urlDatabase[req.params.id];
