@@ -44,8 +44,6 @@ app.post('/urls', (req, res) => {
   urlDatabase[key] = req.body.longURL;
   console.log(urlDatabase);
   res.redirect(`/urls/${key}`)
-    const templateVars = { id: key, longURL: urlDatabase[req.params.id] };
-    res.render('urls_show', templateVars);
 });
 
 // show current url list with json
