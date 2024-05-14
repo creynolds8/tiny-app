@@ -6,11 +6,17 @@ app.set("view engine", "ejs");
 
 const urlDatabase = {
   b2xVn2: "http://www.lighthouselabs.ca",
-  "9sm5xK": "http://www.google.com",
+  '9sm5xK': "http://www.google.com",
 };
 
-const generateRandomString = function() {
-  return Math.random().toString(36).slice(2, 8)
+const str = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+const generateRandomString = function(str) {
+  let rndStr = ''
+  while (rndStr.length < 6) {
+    const i = Math.random() * str.length;
+    rndStr += str[Math.floor(i)];
+  }
+  return rndStr;
 };
 
 app.use(express.urlencoded({extended: true}));
@@ -29,7 +35,9 @@ app.get("/urls", (req, res) => {
 });
 
 app.post('/urls', (req, res) => {
-  console.log(req.body);
+  let key = generateRandomString(str)
+  urlDatabase[key] = req.body.longURL;
+  console.log(urlDatabase);
   res.send('ok');
 });
 
