@@ -1,14 +1,15 @@
-const express = require("express");
+// basic setup
+const express = require('express');
 const app = express();
 const PORT = 8080;
 
-app.set("view engine", "ejs");
-
 const urlDatabase = {
-  b2xVn2: "http://www.lighthouselabs.ca",
-  '9sm5xK': "http://www.google.com",
+  b2xVn2: 'http://www.lighthouselabs.ca',
+  '9sm5xK': 'http://www.google.com',
 };
 
+// random ID creator
+// original random generator solution was also viable
 const str = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
 const generateRandomString = function(str) {
   let rndStr = ''
@@ -19,19 +20,23 @@ const generateRandomString = function(str) {
   return rndStr;
 };
 
+// middleware
+app.set('view engine', 'ejs');
 app.use(express.urlencoded({extended: true}));
 
-app.get("/", (req, res) => {
-  res.send("Hello");
+// routes
+app.get('/', (req, res) => {
+  res.send('Hello');
 });
 
-app.get("/hello", (req, res) => {
-  res.send("<html><body>Hello <b>World</b></body></html>\n");
+app.get('/hello', (req, res) => {
+  res.send('<html><body>Hello <b>World</b></body></html>\n');
 });
 
-app.get("/urls", (req, res) => {
+// show all urls page
+app.get('/urls', (req, res) => {
   const templateVars = { urls: urlDatabase };
-  res.render("urls_index", templateVars);
+  res.render('urls_index', templateVars);
 });
 
 app.post('/urls', (req, res) => {
@@ -43,14 +48,17 @@ app.post('/urls', (req, res) => {
     res.render('urls_show', templateVars);
 });
 
-app.get("/urls.json", (req, res) => {
+// show current url list with json
+app.get('/urls.json', (req, res) => {
   res.json(urlDatabase);
 });
 
+// add a new url page
 app.get('/urls/new', (req, res) => {
   res.render('urls_new');
 });
 
+// show individual url page
 app.get('/urls/:id', (req, res) => {
   const templateVars = { id: req.params.id, longURL: urlDatabase[req.params.id] };
   res.render('urls_show', templateVars);
