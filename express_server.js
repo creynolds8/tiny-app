@@ -20,9 +20,12 @@ const generateRandomString = function(str) {
   return rndStr;
 };
 
-// middleware
+//configuration
 app.set('view engine', 'ejs');
+
+// middleware
 app.use(express.urlencoded({extended: true}));
+app.use(morgan('dev'));
 
 // routes
 app.get('/', (req, res) => {
