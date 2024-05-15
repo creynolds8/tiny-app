@@ -1,8 +1,3 @@
-// const {
-//   urlDatabase,
-//   userDatabase,
-// } = require('../express_server');
-
 // random ID creator
 // original random generator solution was also viable
 const generateRandomString = function() {
