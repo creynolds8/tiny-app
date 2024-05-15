@@ -101,8 +101,8 @@ app.post('/register', (req, res) => {
   // check for from valid field check
   if (error) {
     console.log(error);
-    res.redirect('/register')
-    return res.status(400);
+    res.status(400);
+    return res.redirect('/register')
   }
   res.cookie('user_id', user.id);
   res.redirect('/urls');
