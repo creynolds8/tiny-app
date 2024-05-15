@@ -18,6 +18,7 @@ const createUser = function(userInfo, userDatabase) {
       return { error: 'Blank field', user: null };
     }
   };
+  // check if given email is already registered
   for (const user in userDatabase) {
     if (userInfo.email === userDatabase[user].email) {
       return { error: 'That email is already registered', user: null };
