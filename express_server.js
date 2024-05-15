@@ -44,6 +44,12 @@ app.get('/urls', (req, res) => {
   res.render('urls_index', templateVars);
 });
 
+// add GET route for register
+app.get('/register', (req, res) => {
+  const templateVars = { username: null };
+  res.render('register', templateVars);
+});
+
 app.post('/urls', (req, res) => {
   let key = generateRandomString(str)
   urlDatabase[key] = req.body.longURL;
