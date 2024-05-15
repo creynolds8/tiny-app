@@ -97,7 +97,13 @@ app.post('/login', (req, res) => {
 
 // add POST route for register
 app.post('/register', (req, res) => {
-  const user = createUser(req.body, userDatabase);
+  const { error, user } = createUser(req.body, userDatabase);
+  // check for from valid field check
+  if (error) {
+    console.log(error);
+    res.redirect('/register')
+    return res.status(400);
+  }
   res.cookie('user_id', user.id);
   res.redirect('/urls');
 });
