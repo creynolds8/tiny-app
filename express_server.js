@@ -10,6 +10,19 @@ const urlDatabase = {
   '9sm5xK': 'http://www.google.com',
 };
 
+const userDatabase = {
+  '4go2kL': {
+    id: '4go2kL',
+    email: 'user1@email.com',
+    password: 'user1'
+  },
+  Kc9mq5: {
+    id: 'Kc9mq5',
+    email: 'user2@email.com',
+    password: 'user2'
+  },
+}
+
 // random ID creator
 // original random generator solution was also viable
 const str = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
