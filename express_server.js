@@ -39,7 +39,8 @@ app.use(cookieParser());
 // GET ROUTES
 
 app.get('/login', (req, res) => {
-  res.render('login');
+  const templateVars = { user: null };
+  res.render('login', templateVars);
 });
 
 // show all urls page
