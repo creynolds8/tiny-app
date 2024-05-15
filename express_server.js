@@ -36,7 +36,8 @@ app.use(express.urlencoded({extended: true}));
 app.use(morgan('dev'));
 app.use(cookieParser());
 
-// routes
+// GET ROUTES
+
 app.get('/', (req, res) => {
   res.send('Hello');
 });
@@ -54,25 +55,6 @@ app.get('/urls', (req, res) => {
 app.get('/register', (req, res) => {
   const templateVars = { username: null };
   res.render('register', templateVars);
-});
-
-app.post('/urls', (req, res) => {
-  let key = generateRandomString()
-  urlDatabase[key] = req.body.longURL;
-  res.redirect(`/urls/${key}`);
-});
-
-// add POST for user login
-app.post('/login', (req, res) => {
-  res.cookie('username', req.body.username);
-  res.redirect('/urls');
-})
-
-// add POST route for register
-app.post('/register', (req, res) => {
-  createUser(req.body, userDatabase);
-  res.cookie('username', req.body.email);
-  res.redirect('/urls');
 });
 
 // add a new url page
@@ -93,6 +75,33 @@ app.get('/urls/:id', (req, res) => {
   res.render('urls_show', templateVars);
 });
 
+// add redirect link for short url
+app.get('/u/:id', (req, res) => {
+  const longURL = urlDatabase[req.params.id];
+  res.redirect(longURL);
+});
+
+// POST ROUTES
+
+app.post('/urls', (req, res) => {
+  let key = generateRandomString()
+  urlDatabase[key] = req.body.longURL;
+  res.redirect(`/urls/${key}`);
+});
+
+// add POST for user login
+app.post('/login', (req, res) => {
+  res.cookie('username', req.body.username);
+  res.redirect('/urls');
+})
+
+// add POST route for register
+app.post('/register', (req, res) => {
+  createUser(req.body, userDatabase);
+  res.cookie('username', req.body.email);
+  res.redirect('/urls');
+});
+
 // add route to POST url changes
 app.post('/urls/:id', (req, res) => {
   if (req.body.longURL) {
@@ -107,12 +116,6 @@ app.post('/urls/:id/delete', (req, res) => {
   delete urlDatabase[req.params.id];
   res.redirect('/urls');
 });
-
-// add redirect link for short url
-app.get('/u/:id', (req, res) => {
-  const longURL = urlDatabase[req.params.id];
-  res.redirect(longURL);
-})
 
 // add POST and redirect for logout route
 app.post('/logout', (req, res) => {
