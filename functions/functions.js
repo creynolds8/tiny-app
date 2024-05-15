@@ -1,3 +1,8 @@
+// const {
+//   urlDatabase,
+//   userDatabase,
+// } = require('../express_server');
+
 // random ID creator
 // original random generator solution was also viable
 const generateRandomString = function() {
@@ -10,6 +15,17 @@ const generateRandomString = function() {
   return rndStr;
 };
 
+const createUser = function(userInfo, userDatabase) {
+  const userId = generateRandomString();
+  userDatabase[userId] = {
+    id: userId,
+    email: userInfo.email,
+    password: userInfo.password
+  };
+  return userDatabase;
+}
+
 module.exports = {
   generateRandomString,
-}
+  createUser,
+};
