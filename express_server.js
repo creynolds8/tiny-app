@@ -2,7 +2,10 @@
 const express = require('express');
 const morgan = require('morgan');
 const cookieParser = require('cookie-parser')
-const { generateRandomString } = require('./functions/functions')
+const { 
+  generateRandomString,
+  createUser,
+ } = require('./functions/functions')
 
 const app = express();
 const PORT = 8080;
@@ -64,6 +67,13 @@ app.post('/login', (req, res) => {
   res.cookie('username', req.body.username);
   res.redirect('/urls');
 })
+
+// add POST route for register
+app.post('/register', (req, res) => {
+  createUser(req.body, userDatabase);
+  res.cookie('username', req.body.email);
+  res.redirect('/urls');
+});
 
 // add a new url page
 app.get('/urls/new', (req, res) => {
