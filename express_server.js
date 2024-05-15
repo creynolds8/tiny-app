@@ -23,18 +23,6 @@ const userDatabase = {
   },
 }
 
-// random ID creator
-// original random generator solution was also viable
-const str = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-const generateRandomString = function(str) {
-  let rndStr = ''
-  while (rndStr.length < 6) {
-    const i = Math.random() * str.length;
-    rndStr += str[Math.floor(i)];
-  }
-  return rndStr;
-};
-
 //configuration
 app.set('view engine', 'ejs');
 
