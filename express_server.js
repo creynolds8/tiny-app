@@ -49,6 +49,12 @@ app.post('/urls', (req, res) => {
   res.redirect(`/urls/${key}`)
 });
 
+// add POST for user login
+app.post('/login', (req, res) => {
+  res.cookie(req.body.username);
+  res.redirect('/urls')
+})
+
 // show current url list with json
 app.get('/urls.json', (req, res) => {
   res.json(urlDatabase);
