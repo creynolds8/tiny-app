@@ -2,6 +2,8 @@
 const express = require('express');
 const morgan = require('morgan');
 const cookieParser = require('cookie-parser')
+const { generateRandomString } = require('./functions/functions')
+
 const app = express();
 const PORT = 8080;
 
@@ -52,7 +54,7 @@ app.get('/register', (req, res) => {
 });
 
 app.post('/urls', (req, res) => {
-  let key = generateRandomString(str)
+  let key = generateRandomString()
   urlDatabase[key] = req.body.longURL;
   res.redirect(`/urls/${key}`);
 });
