@@ -35,10 +35,6 @@ app.get('/', (req, res) => {
   res.send('Hello');
 });
 
-app.get('/hello', (req, res) => {
-  res.send('<html><body>Hello <b>World</b></body></html>\n');
-});
-
 // show all urls page
 app.get('/urls', (req, res) => {
   const templateVars = { 
@@ -59,11 +55,6 @@ app.post('/login', (req, res) => {
   res.cookie('username', req.body.username);
   res.redirect('/urls');
 })
-
-// show current url list with json
-app.get('/urls.json', (req, res) => {
-  res.json(urlDatabase);
-});
 
 // add a new url page
 app.get('/urls/new', (req, res) => {
