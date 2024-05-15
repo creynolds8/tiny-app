@@ -38,8 +38,8 @@ app.use(cookieParser());
 
 // GET ROUTES
 
-app.get('/', (req, res) => {
-  res.send('Hello');
+app.get('/login', (req, res) => {
+  res.render('login');
 });
 
 // show all urls page
