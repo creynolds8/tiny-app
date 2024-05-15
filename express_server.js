@@ -51,13 +51,13 @@ app.get('/urls', (req, res) => {
 app.post('/urls', (req, res) => {
   let key = generateRandomString(str)
   urlDatabase[key] = req.body.longURL;
-  res.redirect(`/urls/${key}`)
+  res.redirect(`/urls/${key}`);
 });
 
 // add POST for user login
 app.post('/login', (req, res) => {
   res.cookie('username', req.body.username);
-  res.redirect('/urls')
+  res.redirect('/urls');
 })
 
 // show current url list with json
@@ -88,7 +88,7 @@ app.post('/urls/:id', (req, res) => {
   if (req.body.longURL) {
   urlDatabase[req.params.id] = req.body.longURL;
   };
-  res.redirect('/urls')
+  res.redirect('/urls');
 })
 
 // add POST route to delete urls
@@ -103,6 +103,12 @@ app.get('/u/:id', (req, res) => {
   const longURL = urlDatabase[req.params.id];
   res.redirect(longURL);
 })
+
+// add POST and redirect for logout route
+app.post('/logout', (req, res) => {
+  res.clearCookie('username', req.body.username)
+  res.redirect('/urls');
+});
 
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
