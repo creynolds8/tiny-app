@@ -106,7 +106,7 @@ app.get('/u/:id', (req, res) => {
 
 // add POST and redirect for logout route
 app.post('/logout', (req, res) => {
-  res.clearCookie('username', req.body.username)
+  res.clearCookie('username')
   res.redirect('/urls');
 });
 
