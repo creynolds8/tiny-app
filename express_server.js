@@ -113,3 +113,8 @@ app.post('/logout', (req, res) => {
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
 });
+
+module.exports = {
+  urlDatabase,
+  userDatabase,
+};
