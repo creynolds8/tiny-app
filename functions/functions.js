@@ -17,7 +17,7 @@ const createUser = function(userInfo, userDatabase) {
     email: userInfo.email,
     password: userInfo.password
   };
-  return userDatabase;
+  return userDatabase[userId];
 }
 
 module.exports = {

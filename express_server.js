@@ -46,21 +46,21 @@ app.get('/', (req, res) => {
 app.get('/urls', (req, res) => {
   const templateVars = { 
     urls: urlDatabase,
-    username: req.cookies['username'],
+    user: userDatabase[req.cookies['user_id']] || null,
   };
   res.render('urls_index', templateVars);
 });
 
 // add GET route for register
 app.get('/register', (req, res) => {
-  const templateVars = { username: null };
+  const templateVars = { user: null };
   res.render('register', templateVars);
 });
 
 // add a new url page
 app.get('/urls/new', (req, res) => {
   const templateVars = {
-    username: req.cookies['username'],
+    user: userDatabase[req.cookies['user_id']] || null,
   };
   res.render('urls_new', templateVars);
 });
@@ -70,7 +70,7 @@ app.get('/urls/:id', (req, res) => {
   const templateVars = { 
     id: req.params.id, 
     longURL: urlDatabase[req.params.id],
-    username: req.cookies['username']
+    user: userDatabase[req.cookies['user_id']] || null,
   };
   res.render('urls_show', templateVars);
 });
@@ -91,14 +91,14 @@ app.post('/urls', (req, res) => {
 
 // add POST for user login
 app.post('/login', (req, res) => {
-  res.cookie('username', req.body.username);
+  res.cookie('user_id', req.body.user_id);
   res.redirect('/urls');
 })
 
 // add POST route for register
 app.post('/register', (req, res) => {
-  createUser(req.body, userDatabase);
-  res.cookie('username', req.body.email);
+  const user = createUser(req.body, userDatabase);
+  res.cookie('user_id', user.id);
   res.redirect('/urls');
 });
 
@@ -119,7 +119,7 @@ app.post('/urls/:id/delete', (req, res) => {
 
 // add POST and redirect for logout route
 app.post('/logout', (req, res) => {
-  res.clearCookie('username')
+  res.clearCookie('user_id')
   res.redirect('/urls');
 });
 
