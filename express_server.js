@@ -51,7 +51,7 @@ app.post('/urls', (req, res) => {
 
 // add POST for user login
 app.post('/login', (req, res) => {
-  res.cookie(req.body.username);
+  res.cookie('username', req.body.username);
   res.redirect('/urls')
 })
 
