@@ -42,10 +42,15 @@ const findUser = function(userId, userDatabase) {
   return { error: 'User doesnt exist', user: null };
 };
 
-const findUserByEmail = function(email, userDatabase) {
+const findUserByEmail = function(loginInfo, userDatabase) {
   for (const key in userDatabase) {
-    if (email === userDatabase[key].email) {
-      return { error: null, user: userDatabase[key] };
+    if (loginInfo.email === userDatabase[key].email) {
+      if (loginInfo.password === userDatabase[key].password) {
+        return { error: null, user: userDatabase[key] };
+
+      } else {
+        return { error: 'Incorrect Password', user: null };
+      }
     }
   }
   return { error: 'User not found', user: null };
