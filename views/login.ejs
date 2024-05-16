@@ -14,6 +14,12 @@
 <header><%- include('partials/_header') %></header>
 <body>
   <h1 style="margin: 1em">Welcome back to Tiny App!</h1>
+  <% if (error) { %>
+    <section 
+    class="error">
+      <%= error %>
+    </section>
+    <% } %>
     <form action="/login" method="post" style="margin: 1em">
       <h4 style="margin: 1em">Please Login Below</h4>
       <label for="email">Enter Your Email Here:</label>
@@ -51,4 +57,14 @@
     crossorigin="anonymous"
   ></script>
 </body>
+<style>
+  .error{
+    margin: 1em;
+    padding: 1em;
+    text-align: center;
+    background: rgb(200, 75, 100);
+    border: 0.5em solid red;
+    max-width: 500px;
+  }
+</style>
 </html>
