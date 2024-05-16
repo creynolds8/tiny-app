@@ -42,8 +42,18 @@ const findUser = function(userId, userDatabase) {
   return { error: 'User doesnt exist', user: null };
 };
 
+const findUserByEmail = function(email, userDatabase) {
+  for (const key in userDatabase) {
+    if (email === userDatabase[key].email) {
+      return { error: null, user: userDatabase[key] };
+    }
+  }
+  return { error: 'User not found', user: null };
+}
+
 module.exports = {
   generateRandomString,
   createUser,
   findUser,
+  findUserByEmail,
 };
