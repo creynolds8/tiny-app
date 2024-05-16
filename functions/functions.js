@@ -1,7 +1,4 @@
 // random ID creator
-
-const { urlDatabase } = require("../express_server");
-
 // original random generator solution was also viable
 const generateRandomString = function() {
   const str = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
@@ -36,14 +33,14 @@ const createUser = function(userInfo, userDatabase) {
   return { error: null, user: userDatabase[userId] };
 };
 
-const findUser = function(userId, userDatabase) {
-  for (const user in userDatabase) {
-    if (user === userId) {
-      return { error: null, user: user};
-    }
-  }
-  return { error: 'User doesnt exist', user: null };
-};
+// const findUser = function(userId, userDatabase) {
+//   for (const user in userDatabase) {
+//     if (user === userId) {
+//       return { error: null, user: user};
+//     }
+//   }
+//   return { error: 'User doesnt exist', user: null };
+// };
 
 const findUserByEmail = function(loginInfo, userDatabase) {
   for (const key in userDatabase) {
@@ -59,10 +56,10 @@ const findUserByEmail = function(loginInfo, userDatabase) {
   return { error: 'User not found', user: null };
 };
 
-const urlsForUser = function(id) {
+const urlsForUser = function(id, urlDatabase) {
   const userUrls = {};
   for (const urlId in urlDatabase) {
-    if (urlId.id === userCookie) {
+    if (urlDatabase[urlId].id === id) {
       userUrls[urlId] = urlDatabase[urlId];
     }
   }
@@ -72,7 +69,6 @@ const urlsForUser = function(id) {
 module.exports = {
   generateRandomString,
   createUser,
-  findUser,
   findUserByEmail,
   urlsForUser,
 };
