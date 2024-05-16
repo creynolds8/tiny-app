@@ -183,7 +183,7 @@ app.post('/urls/:id', (req, res) => {
     return res.render('urls_show', templateVars);
   }
   if (req.body.longURL) {
-  urlDatabase[req.params.id].email = req.body.longURL;
+  urlDatabase[req.params.id].longURL = req.body.longURL;
   };
   return res.redirect('/urls');
 })
