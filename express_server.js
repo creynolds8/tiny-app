@@ -1,7 +1,9 @@
 // basic setup
 const express = require('express');
 const morgan = require('morgan');
-const cookieParser = require('cookie-parser')
+const cookieParser = require('cookie-parser');
+const bcrypt = require('bcryptjs');
+
 const { 
   generateRandomString,
   createUser,
@@ -27,12 +29,12 @@ const userDatabase = {
   '4go2kL': {
     id: '4go2kL',
     email: 'user1@email.com',
-    password: 'user1'
+    password: '$2a$10$3jKIujazmVdf7826GQv5fO62qFLqlDD6szHnCUXk/2Nerkbwz2ctK'
   },
   Kc9mq5: {
     id: 'Kc9mq5',
     email: 'user2@email.com',
-    password: 'user2'
+    password: '$2a$10$1pElZOjD80zauoGPmp488uJt2vl50eDKHbMzfZy3BIbkW9QKxEonq'
   },
 };
 
@@ -153,8 +155,6 @@ app.post('/login', (req, res) => {
     return res.render('login', templateVars);
   }
   res.cookie('user_id', user.id);
-  // userCookie = req.cookies['user_id'];
-  console.log(req.cookies);
   return res.redirect('/urls');
 })
 
@@ -168,7 +168,6 @@ app.post('/register', (req, res) => {
     return res.render('register', templateVars);
   };
   res.cookie('user_id', user.id);
-  // userCookie = req.cookies['user_id'];
   return res.redirect('/urls');
 });
 
