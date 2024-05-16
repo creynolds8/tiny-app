@@ -27,7 +27,9 @@ const userDatabase = {
     email: 'user2@email.com',
     password: 'user2'
   },
-}
+};
+
+let userCookie = null;
 
 //configuration
 app.set('view engine', 'ejs');
@@ -41,7 +43,10 @@ app.use(cookieParser());
 
 app.get('/login', (req, res) => {
   const templateVars = { user: null };
-  res.render('login', templateVars);
+  if (userCookie) {
+    return res.redirect('/urls');
+  }
+  return res.render('login', templateVars);
 });
 
 // show all urls page
@@ -50,13 +55,16 @@ app.get('/urls', (req, res) => {
     urls: urlDatabase,
     user: userDatabase[req.cookies['user_id']] || null,
   };
-  res.render('urls_index', templateVars);
+  return res.render('urls_index', templateVars);
 });
 
 // add GET route for register
 app.get('/register', (req, res) => {
   const templateVars = { user: null };
-  res.render('register', templateVars);
+  if (userCookie) {
+    return res.redirect('/urls')
+  };
+  return res.render('register', templateVars);
 });
 
 // add a new url page
@@ -64,7 +72,7 @@ app.get('/urls/new', (req, res) => {
   const templateVars = {
     user: userDatabase[req.cookies['user_id']] || null,
   };
-  res.render('urls_new', templateVars);
+  return res.render('urls_new', templateVars);
 });
 
 // show individual url page
@@ -74,13 +82,13 @@ app.get('/urls/:id', (req, res) => {
     longURL: urlDatabase[req.params.id],
     user: userDatabase[req.cookies['user_id']] || null,
   };
-  res.render('urls_show', templateVars);
+  return res.render('urls_show', templateVars);
 });
 
 // add redirect link for short url
 app.get('/u/:id', (req, res) => {
   const longURL = urlDatabase[req.params.id];
-  res.redirect(longURL);
+  return res.redirect(longURL);
 });
 
 // POST ROUTES
@@ -88,7 +96,7 @@ app.get('/u/:id', (req, res) => {
 app.post('/urls', (req, res) => {
   let key = generateRandomString()
   urlDatabase[key] = req.body.longURL;
-  res.redirect(`/urls/${key}`);
+  return res.redirect(`/urls/${key}`);
 });
 
 // add POST for user login
@@ -99,8 +107,8 @@ app.post('/login', (req, res) => {
     return res.status(403).send(error);
     // return res.redirect('/login')
   }
-  res.cookie('user_id', user.id);
-  res.redirect('/urls');
+  userCookie = res.cookie('user_id', user.id);
+  return res.redirect('/urls');
 })
 
 // add POST route for register
@@ -112,8 +120,8 @@ app.post('/register', (req, res) => {
     return res.status(400).send(error);
     // return res.redirect('/register')
   }
-  res.cookie('user_id', user.id);
-  res.redirect('/urls');
+  userCookie = res.cookie('user_id', user.id);
+  return res.redirect('/urls');
 });
 
 // add route to POST url changes
@@ -121,20 +129,20 @@ app.post('/urls/:id', (req, res) => {
   if (req.body.longURL) {
   urlDatabase[req.params.id] = req.body.longURL;
   };
-  res.redirect('/urls');
+  return res.redirect('/urls');
 })
 
 // add POST route to delete urls
 app.post('/urls/:id/delete', (req, res) => {
   console.log(urlDatabase[req.params.id]);
   delete urlDatabase[req.params.id];
-  res.redirect('/urls');
+  return res.redirect('/urls');
 });
 
 // add POST and redirect for logout route
 app.post('/logout', (req, res) => {
   res.clearCookie('user_id')
-  res.redirect('/login');
+  return res.redirect('/login');
 });
 
 app.listen(PORT, () => {
