@@ -1,3 +1,4 @@
+const bcrypt = require('bcryptjs')
 // random ID creator
 // original random generator solution was also viable
 const generateRandomString = function() {
@@ -28,27 +29,19 @@ const createUser = function(userInfo, userDatabase) {
   userDatabase[userId] = {
     id: userId,
     email: userInfo.email,
-    password: userInfo.password
+    password: bcrypt.hashSync(userInfo.password, 10)
   };
+  console.log(userDatabase);
   return { error: null, user: userDatabase[userId] };
 };
-
-// const findUser = function(userId, userDatabase) {
-//   for (const user in userDatabase) {
-//     if (user === userId) {
-//       return { error: null, user: user};
-//     }
-//   }
-//   return { error: 'User doesnt exist', user: null };
-// };
 
 const findUserByEmail = function(loginInfo, userDatabase) {
   for (const key in userDatabase) {
     if (loginInfo.email === userDatabase[key].email) {
-      if (loginInfo.password === userDatabase[key].password) {
+      if (bcrypt.compareSync(loginInfo.password, userDatabase[key].password)) {
         return { error: null, user: userDatabase[key] };
-
       } else {
+        console.log(loginInfo.password, userDatabase[key].password);
         return { error: 'Incorrect Password', user: null };
       }
     }
