@@ -90,6 +90,10 @@ app.get('/urls/:id', (req, res) => {
 
 // add redirect link for short url
 app.get('/u/:id', (req, res) => {
+  console.log(req.params);
+  if (!urlDatabase[req.params.id]) {
+    return res.send('Sorry that shortened URL does not exist')
+  }
   const longURL = urlDatabase[req.params.id];
   return res.redirect(longURL);
 });
@@ -97,6 +101,9 @@ app.get('/u/:id', (req, res) => {
 // POST ROUTES
 
 app.post('/urls', (req, res) => {
+  if (!userCookie) {
+    return res.send('Sorry, you are not logged in')
+  }
   let key = generateRandomString()
   urlDatabase[key] = req.body.longURL;
   return res.redirect(`/urls/${key}`);
