@@ -44,7 +44,10 @@ app.set('view engine', 'ejs');
 // middleware
 app.use(express.urlencoded({extended: true}));
 app.use(morgan('dev'));
-app.use(cookieParser());
+app.use(cookieSession({
+  name: 'user_id',
+  key: [248163264]
+}));
 
 // GET ROUTES
 
