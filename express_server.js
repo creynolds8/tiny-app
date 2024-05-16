@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser')
 const { 
   generateRandomString,
   createUser,
+  findUserByEmail,
  } = require('./functions/functions')
 
 const app = express();
@@ -92,7 +93,13 @@ app.post('/urls', (req, res) => {
 
 // add POST for user login
 app.post('/login', (req, res) => {
-  res.cookie('user_id', req.body.user_id);
+  const { error, user } = findUserByEmail(req.body.email, userDatabase)
+  if (error) {
+    console.log(error);
+    return res.status(403).send(error);
+    // return res.redirect('/login')
+  }
+  res.cookie('user_id', user.id);
   res.redirect('/urls');
 })
 
@@ -102,8 +109,8 @@ app.post('/register', (req, res) => {
   // check for from valid field check
   if (error) {
     console.log(error);
-    res.status(400);
-    return res.redirect('/register')
+    return res.status(400).send(error);
+    // return res.redirect('/register')
   }
   res.cookie('user_id', user.id);
   res.redirect('/urls');
@@ -127,7 +134,7 @@ app.post('/urls/:id/delete', (req, res) => {
 // add POST and redirect for logout route
 app.post('/logout', (req, res) => {
   res.clearCookie('user_id')
-  res.redirect('/urls');
+  res.redirect('/login');
 });
 
 app.listen(PORT, () => {
