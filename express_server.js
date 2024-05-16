@@ -12,8 +12,14 @@ const app = express();
 const PORT = 8080;
 
 const urlDatabase = {
-  b2xVn2: 'http://www.lighthouselabs.ca',
-  '9sm5xK': 'http://www.google.com',
+  b2xVn2: {
+    longURL: 'http://www.lighthouselabs.ca',
+    id: '4go2kL'
+  },
+  '9sm5xK': {
+    longURL: 'http://www.google.com',
+    id: '4go2kL'
+  },
 };
 
 const userDatabase = {
@@ -82,7 +88,7 @@ app.get('/urls/new', (req, res) => {
 app.get('/urls/:id', (req, res) => {
   const templateVars = { 
     id: req.params.id, 
-    longURL: urlDatabase[req.params.id],
+    longURL: urlDatabase[req.params.id].longURL,
     user: userDatabase[req.cookies['user_id']] || null,
   };
   return res.render('urls_show', templateVars);
@@ -90,11 +96,10 @@ app.get('/urls/:id', (req, res) => {
 
 // add redirect link for short url
 app.get('/u/:id', (req, res) => {
-  console.log(req.params);
   if (!urlDatabase[req.params.id]) {
     return res.send('Sorry that shortened URL does not exist')
   }
-  const longURL = urlDatabase[req.params.id];
+  const longURL = urlDatabase[req.params.id].longURL;
   return res.redirect(longURL);
 });
 
@@ -105,7 +110,10 @@ app.post('/urls', (req, res) => {
     return res.send('Sorry, you are not logged in')
   }
   let key = generateRandomString()
-  urlDatabase[key] = req.body.longURL;
+  urlDatabase[key] = {
+    id: key,
+    longURL: req.body.longURL
+  };
   return res.redirect(`/urls/${key}`);
 });
 
@@ -137,20 +145,20 @@ app.post('/register', (req, res) => {
 // add route to POST url changes
 app.post('/urls/:id', (req, res) => {
   if (req.body.longURL) {
-  urlDatabase[req.params.id] = req.body.longURL;
+  urlDatabase[req.params.id].email = req.body.longURL;
   };
   return res.redirect('/urls');
 })
 
 // add POST route to delete urls
 app.post('/urls/:id/delete', (req, res) => {
-  console.log(urlDatabase[req.params.id]);
   delete urlDatabase[req.params.id];
   return res.redirect('/urls');
 });
 
 // add POST and redirect for logout route
 app.post('/logout', (req, res) => {
+  userCookie = null;
   res.clearCookie('user_id')
   return res.redirect('/login');
 });
