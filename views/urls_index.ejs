@@ -18,6 +18,11 @@
   <header><%- include('partials/_header') %></header>
   <body>
     <main style="margin: 1em">
+      <% if (error) { %>
+        <section class="error">
+          <%= error %>
+        </section>
+        <% } else { %>
       <h3>My URLs</h3>
       <table>
         <thread>
@@ -44,6 +49,7 @@
           <% } %>
         </tbody>
       </table>
+      <% } %>
     </main>
     <script
       src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
@@ -61,4 +67,14 @@
       crossorigin="anonymous"
     ></script>
   </body>
+  <style>
+    .error{
+      margin: 1em;
+      padding: 1em;
+      text-align: center;
+      background: rgb(200, 75, 100);
+      border: 0.5em solid red;
+      max-width: 500px;
+    }
+  </style>
 </html>
