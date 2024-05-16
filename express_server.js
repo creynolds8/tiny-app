@@ -46,14 +46,14 @@ app.use(express.urlencoded({extended: true}));
 app.use(morgan('dev'));
 app.use(cookieSession({
   name: 'user_id',
-  key: [248163264]
+  keys: ['248163264']
 }));
 
 // GET ROUTES
 
 app.get('/login', (req, res) => {
   const templateVars = { error: null, user: null };
-  if (req.cookies['user_id']) {
+  if (req.session.user_id) {
     return res.redirect('/urls');
   }
   return res.render('login', templateVars);
@@ -61,17 +61,17 @@ app.get('/login', (req, res) => {
 
 // show all urls page
 app.get('/urls', (req, res) => {
-  if (!req.cookies['user_id']) {
+  if (!req.session.user_id) {
     const templateVars = {
       error: 'Please login or register to view URLs',
       user: null };
     return res.render('urls_index', templateVars)
   }
-  if (req.cookies['user_id']) {
+  if (req.session.user_id) {
     const templateVars = { 
       error: null,
-      urls: urlsForUser(req.cookies['user_id'], urlDatabase),
-      user: userDatabase[req.cookies['user_id']] || null,
+      urls: urlsForUser(req.session.user_id, urlDatabase),
+      user: userDatabase[req.session.user_id] || null,
     };
     return res.render('urls_index', templateVars);
     
@@ -82,7 +82,7 @@ app.get('/urls', (req, res) => {
 // add GET route for register
 app.get('/register', (req, res) => {
   const templateVars = { error: null, user: null };
-  if (req.cookies['user_id']) {
+  if (req.session.user_id) {
     return res.redirect('/urls')
   };
   return res.render('register', templateVars);
@@ -90,25 +90,25 @@ app.get('/register', (req, res) => {
 
 // add a new url page
 app.get('/urls/new', (req, res) => {
-  if (!req.cookies['user_id']) {
+  if (!req.session.user_id) {
     return res.redirect('/login')
   }
   const templateVars = {
-    user: userDatabase[req.cookies['user_id']] || null,
+    user: userDatabase[req.session.user_id] || null,
   };
   return res.render('urls_new', templateVars);
 });
 
 // show individual url page
 app.get('/urls/:id', (req, res) => {
-  if (!req.cookies['user_id']) {
+  if (!rreq.session.user_id) {
     const templateVars = {
       error: 'Please login to view this URL',
       user: null
     };
     res.render('urls_show', templateVars)
   }
-  if (req.cookies['user_id'] !== urlDatabase[req.params.id].id) {
+  if (req.session.user_id !== urlDatabase[req.params.id].id) {
     const templateVars = {
       error: 'You do not have access to this URL',
       user: null,
@@ -119,7 +119,7 @@ app.get('/urls/:id', (req, res) => {
     error: null,
     id: req.params.id, 
     longURL: urlDatabase[req.params.id].longURL,
-    user: userDatabase[req.cookies['user_id']] || null,
+    user: userDatabase[req.session.user_id] || null,
   };
   return res.render('urls_show', templateVars);
 });
@@ -137,15 +137,14 @@ app.get('/u/:id', (req, res) => {
 // POST ROUTES
 
 app.post('/urls', (req, res) => {
-  if (!req.cookies['user_id']) {
+  if (!req.session.user_id) {
     return res.send('Sorry, you are not logged in')
   }
   let key = generateRandomString()
   urlDatabase[key] = {
-    id: req.cookies['user_id'],
+    id: req.session.user_id,
     longURL: req.body.longURL
   };
-  console.log(urlDatabase);
   return res.redirect(`/urls/${key}`);
 });
 
@@ -157,7 +156,8 @@ app.post('/login', (req, res) => {
     templateVars = { error: error, user: null};
     return res.render('login', templateVars);
   }
-  res.cookie('user_id', user.id);
+  req.session.user_id = user.id;
+  console.log(req.session.user_id);
   return res.redirect('/urls');
 })
 
@@ -170,18 +170,17 @@ app.post('/register', (req, res) => {
     templateVars = { error: error, user: null };
     return res.render('register', templateVars);
   };
-  res.cookie('user_id', user.id);
+  req.session.user_id = user.id
   return res.redirect('/urls');
 });
 
 // add route to POST url changes
 app.post('/urls/:id', (req, res) => {
-  if (req.cookies['user_id'] !== urlDatabase[req.params.id].id) {
+  if (req.session.user_id !== urlDatabase[req.params.id].id) {
     const templateVars = {
       error: 'You do not have access to this URL',
       user: null,
     }
-    console.log(templateVars.error);
     return res.render('urls_show', templateVars);
   }
   if (req.body.longURL) {
@@ -192,7 +191,7 @@ app.post('/urls/:id', (req, res) => {
 
 // add POST route to delete urls
 app.post('/urls/:id/delete', (req, res) => {
-  if (req.cookies['user_id'] !== urlDatabase[req.params.id].id) {
+  if (req.session.user_id !== urlDatabase[req.params.id].id) {
     const templateVars = {
       error: 'You do not have access to this URL',
       user: null,
@@ -205,7 +204,7 @@ app.post('/urls/:id/delete', (req, res) => {
 
 // add POST and redirect for logout route
 app.post('/logout', (req, res) => {
-  res.clearCookie('user_id')
+  req.session = null;
   return res.redirect('/login');
 });
 
