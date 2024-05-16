@@ -93,7 +93,7 @@ app.post('/urls', (req, res) => {
 
 // add POST for user login
 app.post('/login', (req, res) => {
-  const { error, user } = findUserByEmail(req.body.email, userDatabase)
+  const { error, user } = findUserByEmail(req.body, userDatabase)
   if (error) {
     console.log(error);
     return res.status(403).send(error);
