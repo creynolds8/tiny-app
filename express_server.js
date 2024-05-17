@@ -42,7 +42,8 @@ const userDatabase = {
 app.set('view engine', 'ejs');
 
 // middleware
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({extended: false}));
+app.use(express.json())
 app.use(morgan('dev'));
 app.use(cookieSession({
   name: 'user_id',
