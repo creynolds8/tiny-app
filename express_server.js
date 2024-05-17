@@ -101,7 +101,7 @@ app.get('/urls/new', (req, res) => {
 
 // show individual url page
 app.get('/urls/:id', (req, res) => {
-  if (!rreq.session.user_id) {
+  if (!req.session.user_id) {
     const templateVars = {
       error: 'Please login to view this URL',
       user: null
