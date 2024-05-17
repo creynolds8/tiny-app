@@ -2,7 +2,6 @@
 const express = require("express");
 const morgan = require("morgan");
 const cookieSession = require("cookie-session");
-const bcrypt = require("bcryptjs");
 
 const {
   generateRandomString,
@@ -84,7 +83,7 @@ app.get("/urls", (req, res) => {
     };
     return res.render("urls_index", templateVars);
   }
-  return res.render("urls_index", templateVars);
+  return res.render("urls_index");
 });
 
 // add GET route for register
@@ -160,7 +159,7 @@ app.get("/u/:id", (req, res) => {
 
 app.post("/urls", (req, res) => {
   if (!req.session.user_id) {
-    res.status(401)
+    res.status(401);
     return res.send("Sorry, you are not logged in");
   }
   let key = generateRandomString();
@@ -175,9 +174,8 @@ app.post("/urls", (req, res) => {
 app.post("/login", (req, res) => {
   const { error, user } = findUserByEmail(req.body, userDatabase);
   if (error) {
-    console.log(error);
-    templateVars = { error: error, user: null };
-    res.status(401)
+    const templateVars = { error: error, user: null };
+    res.status(401);
     return res.render("login", templateVars);
   }
   req.session.user_id = user.id;
@@ -189,8 +187,8 @@ app.post("/register", (req, res) => {
   const { error, user } = createUser(req.body, userDatabase);
   // check for from valid field check
   if (error) {
-    templateVars = { error: error, user: null };
-    res.status(400)
+    const templateVars = { error: error, user: null };
+    res.status(400);
     return res.render("register", templateVars);
   }
   req.session.user_id = user.id;
@@ -204,7 +202,7 @@ app.post("/urls/:id", (req, res) => {
       error: "You do not have access to this URL",
       user: null,
     };
-    res.status(403)
+    res.status(403);
     return res.render("urls_show", templateVars);
   }
   if (req.body.longURL) {
@@ -220,7 +218,7 @@ app.post("/urls/:id/delete", (req, res) => {
       error: "You do not have access to this URL",
       user: null,
     };
-    res.status(403)
+    res.status(403);
     return res.render("urls_show", templateVars);
   }
   delete urlDatabase[req.params.id];
