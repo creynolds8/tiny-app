@@ -9,7 +9,7 @@ const {
   createUser,
   findUserByEmail,
   urlsForUser,
- } = require('./functions/helpers')
+ } = require('./helpers')
 
 const app = express();
 const PORT = 8080;
