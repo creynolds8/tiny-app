@@ -46,7 +46,7 @@ app.use(express.json());
 app.use(morgan("dev"));
 app.use(
   cookieSession({
-    name: "user_id",
+    name: "userId",
     keys: ["248163264"],
   })
 );
@@ -60,7 +60,7 @@ app.get("/", (req, res) => {
 app.get("/login", (req, res) => {
   const templateVars = { error: null, user: null };
   // check if user is already logged in
-  if (req.session.user_id) {
+  if (req.session.userId) {
     return res.redirect("/urls");
   }
   return res.render("login", templateVars);
@@ -69,7 +69,7 @@ app.get("/login", (req, res) => {
 // show all urls page
 app.get("/urls", (req, res) => {
   // check if cookie is not present
-  if (!req.session.user_id) {
+  if (!req.session.userId) {
     const templateVars = {
       error: "Please login or register to view URLs",
       user: null,
@@ -78,11 +78,11 @@ app.get("/urls", (req, res) => {
     return res.render("urls_index", templateVars);
   }
   // if user is logged in, show all urls associated with their id
-  if (req.session.user_id) {
+  if (req.session.userId) {
     const templateVars = {
       error: null,
-      urls: urlsForUser(req.session.user_id, urlDatabase),
-      user: userDatabase[req.session.user_id] || null,
+      urls: urlsForUser(req.session.userId, urlDatabase),
+      user: userDatabase[req.session.userId] || null,
     };
     return res.render("urls_index", templateVars);
   }
@@ -93,7 +93,7 @@ app.get("/urls", (req, res) => {
 app.get("/register", (req, res) => {
   // if user is logged in, redirect to urls page
   const templateVars = { error: null, user: null };
-  if (req.session.user_id) {
+  if (req.session.userId) {
     return res.redirect("/urls");
   }
   return res.render("register", templateVars);
@@ -102,11 +102,11 @@ app.get("/register", (req, res) => {
 // add a new url page
 app.get("/urls/new", (req, res) => {
   // if user is not logged in redirect to login page
-  if (!req.session.user_id) {
+  if (!req.session.userId) {
     return res.redirect("/login");
   }
   const templateVars = {
-    user: userDatabase[req.session.user_id] || null,
+    user: userDatabase[req.session.userId] || null,
   };
   return res.render("urls_new", templateVars);
 });
@@ -123,7 +123,7 @@ app.get("/urls/:id", (req, res) => {
     return res.render("urls_show", templateVars);
   }
   // check if user is logged in
-  if (!req.session.user_id) {
+  if (!req.session.userId) {
     const templateVars = {
       error: "Please login to view this URL",
       user: null,
@@ -132,7 +132,7 @@ app.get("/urls/:id", (req, res) => {
     return res.render("urls_show", templateVars);
   }
   // check if user cookie matches id of user who created the short url
-  if (req.session.user_id !== urlDatabase[req.params.id].id) {
+  if (req.session.userId !== urlDatabase[req.params.id].id) {
     const templateVars = {
       error: "You do not have access to this URL",
       user: null,
@@ -144,7 +144,7 @@ app.get("/urls/:id", (req, res) => {
     error: null,
     id: req.params.id,
     longURL: urlDatabase[req.params.id].longURL,
-    user: userDatabase[req.session.user_id] || null,
+    user: userDatabase[req.session.userId] || null,
   };
   return res.render("urls_show", templateVars);
 });
@@ -167,13 +167,13 @@ app.get("/u/:id", (req, res) => {
 // POST ROUTES
 
 app.post("/urls", (req, res) => {
-  if (!req.session.user_id) {
+  if (!req.session.userId) {
     res.status(401);
     return res.send("Sorry, you are not logged in");
   }
   let key = generateRandomString();
   urlDatabase[key] = {
-    id: req.session.user_id,
+    id: req.session.userId,
     longURL: req.body.longURL,
   };
   return res.redirect(`/urls/${key}`);
@@ -188,7 +188,7 @@ app.post("/login", (req, res) => {
     res.status(401);
     return res.render("login", templateVars);
   }
-  req.session.user_id = user.id;
+  req.session.userId = user.id;
   return res.redirect("/urls");
 });
 
@@ -201,14 +201,14 @@ app.post("/register", (req, res) => {
     res.status(400);
     return res.render("register", templateVars);
   }
-  req.session.user_id = user.id;
+  req.session.userId = user.id;
   return res.redirect("/urls");
 });
 
 // add route to POST url changes
 app.post("/urls/:id", (req, res) => {
   // check user id against id of user who created the short url
-  if (req.session.user_id !== urlDatabase[req.params.id].id) {
+  if (req.session.userId !== urlDatabase[req.params.id].id) {
     const templateVars = {
       error: "You do not have access to this URL",
       user: null,
@@ -225,7 +225,7 @@ app.post("/urls/:id", (req, res) => {
 // add POST route to delete urls
 app.post("/urls/:id/delete", (req, res) => {
   // check if user id matches user id that created url
-  if (req.session.user_id !== urlDatabase[req.params.id].id) {
+  if (req.session.userId !== urlDatabase[req.params.id].id) {
     const templateVars = {
       error: "You do not have access to this URL",
       user: null,
