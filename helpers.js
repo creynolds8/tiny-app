@@ -11,6 +11,9 @@ const generateRandomString = function() {
   return rndStr;
 };
 
+// For more in for as to why I return an object from the following 
+// functions, see note *1* in README
+
 const createUser = function(userInfo, userDatabase) {
   // check if in put fields are valid
   const keyArr = Object.keys(userInfo);
