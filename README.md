@@ -41,4 +41,4 @@
   ### Please reach out on Discord if you have any questions, concerns, or issues!
   ### Discord Username: @fuzzyslippers256
 
-  ![alt text](https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.lighthouselabs.ca%2Fen%2Fblog&psig=AOvVaw0ouN-QcKcQtQD8DcON2MYf&ust=1716009119956000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCMjc1Kv2k4YDFQAAAAAdAAAAABAE)
+  ![alt text](https://www.lighthouselabs.ca/assets/larry-309b0188c5377c5a70c86df7c844be1b57e17468ac674e764fafb0d689ce9fa7.png)
