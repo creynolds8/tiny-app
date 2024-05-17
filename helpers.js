@@ -34,7 +34,6 @@ const createUser = function(userInfo, userDatabase) {
     email: userInfo.email,
     password: bcrypt.hashSync(userInfo.password, 10),
   };
-  console.log(userDatabase);
   return { error: null, user: userDatabase[userId] };
 };
 
