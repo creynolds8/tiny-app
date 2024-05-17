@@ -1,6 +1,30 @@
 # Welcome to my Tiny App Project!
 
-## Below are two notes to explain some choices I made in this project 
+## Final Product
+
+!['Screenshot of URLs Page'](https://github.com/creynolds8/tiny-app/blob/main/docs/url-show.png?raw=true)
+
+!['Screenshot of individual URL Page'](https://github.com/creynolds8/tiny-app/blob/main/docs/urls-page.png?raw=true)
+
+## Dependencies
+
+- Node.js
+- Express
+- EJS
+- bcryptjs
+- cookie-session
+
+## Getting Started
+
+- Install the above dependencies (using `npm install {dependency name}` command).
+- Run the web server using `node express_server.js` command
+
+### Created by Cameron Reynolds during Web Development Bootcamp at Lighthouse Labs
+
+### Please reach out on Discord if you have any questions, concerns, or issues!
+### Discord Username: @fuzzyslippers256
+
+### Below is a note to explain some choices I made in this project 
 
 ### Note *1*
 -I made the choice to return the object for the following reasons:
@@ -18,27 +42,6 @@
   case of login and register, allowing the user to try either again without having
   to navigate back to the desired page.
 
-### Note *2*
--The reason that these specific lines of the test file have been commented out is as follows:
-  1. upon testing these routes manually and checking the Developer tools it was
-  clear that the status code is 302 indicating a redirect.
 
-  2. however, the specific test lines expecting a 302 redirect status code were getting
-  a 200 success status code.
-
-  3. I determined this was because the test was reading the 200 success code from
-  reaching the desired URL instead of reading the 302 redirect code.
-
-  4. I spent an hour in a Zoom call with mentor Lovemore Jokonya trying to first
-  diagnose then solve this issue
-
-  5. Unfortunately we could not figure a work around to the test library following
-  the redirect and recieving the 'wrong' status code. At this point, we decided 
-  that to comment out the problem line of the test and direct here for more info.
-
-  ### Created by Cameron Reynolds during Web Development Bootcamp at Lighthouse Labs
-
-  ### Please reach out on Discord if you have any questions, concerns, or issues!
-  ### Discord Username: @fuzzyslippers256
 
   ![alt text](https://www.lighthouselabs.ca/assets/larry-309b0188c5377c5a70c86df7c844be1b57e17468ac674e764fafb0d689ce9fa7.png)
