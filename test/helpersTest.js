@@ -22,6 +22,7 @@ describe('findUserByEmail', function() {
     }
     const result = findUserByEmail(loginInfo, testUsers)
     const expectedUserId = 'user1id';
+    assert.isNull(result.error);
     assert.equal(result.user.id, expectedUserId);
   });
   it('should return User not found if user does not exist', () => {
@@ -30,7 +31,8 @@ describe('findUserByEmail', function() {
       password: 'user3'
     }
     const result = findUserByEmail(loginInfo, testUsers)
-    assert.equal(result.error, 'User not found')
+    assert.isNull(result.user);
+    assert.equal(result.error, 'User not found');
   });
   it('return incorrect password if the password is wrong', () => {
     const loginInfo = {
@@ -38,6 +40,8 @@ describe('findUserByEmail', function() {
       email: 'user1@email.com'
     }
     const result = findUserByEmail(loginInfo, testUsers)
+    assert.isNull(result.user)
     assert.equal(result.error, 'Incorrect Password')
-  })
+  });
+
 });
