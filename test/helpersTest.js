@@ -56,16 +56,16 @@ chai.use(chaiHttp);
 const agent = chai.request.agent("http://localhost:8080");
 describe("Testing URL routes", () => {
   it("GET / should redirect to /login with status 302", () => {
-    return agent.get("/").then((res) => {
-      expect(res).to.redirectTo("http://localhost:8080/login");
-      // expect(res).to.have.status(302); see README.md *2* for info
+    return agent.get("/").redirects(0).then((res) => {
+      expect(res).to.redirectTo("/login");
+      expect(res).to.have.status(302);
     });
   });
 
   it("GET /urls/new should redirect to /login with status 302", () => {
-    return agent.get("/urls/new").then((res) => {
-      expect(res).to.redirectTo("http://localhost:8080/login");
-      // expect(res).to.have.status(302); see README.md *2* for info
+    return agent.get("/urls/new").redirects(0).then((res) => {
+      expect(res).to.redirectTo("/login");
+      expect(res).to.have.status(302);
     });
   });
 
