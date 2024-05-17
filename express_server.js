@@ -54,11 +54,12 @@ app.use(
 // GET ROUTES
 
 app.get("/", (req, res) => {
-  res.redirect("/login");
+  return res.redirect("/login");
 });
 
 app.get("/login", (req, res) => {
   const templateVars = { error: null, user: null };
+  // check if user is already logged in
   if (req.session.user_id) {
     return res.redirect("/urls");
   }
@@ -67,6 +68,7 @@ app.get("/login", (req, res) => {
 
 // show all urls page
 app.get("/urls", (req, res) => {
+  // check if cookie is not present
   if (!req.session.user_id) {
     const templateVars = {
       error: "Please login or register to view URLs",
@@ -75,6 +77,7 @@ app.get("/urls", (req, res) => {
     res.status(401);
     return res.render("urls_index", templateVars);
   }
+  // if user is logged in, show all urls associated with their id
   if (req.session.user_id) {
     const templateVars = {
       error: null,
@@ -88,6 +91,7 @@ app.get("/urls", (req, res) => {
 
 // add GET route for register
 app.get("/register", (req, res) => {
+  // if user is logged in, redirect to urls page
   const templateVars = { error: null, user: null };
   if (req.session.user_id) {
     return res.redirect("/urls");
@@ -97,6 +101,7 @@ app.get("/register", (req, res) => {
 
 // add a new url page
 app.get("/urls/new", (req, res) => {
+  // if user is not logged in redirect to login page
   if (!req.session.user_id) {
     return res.redirect("/login");
   }
@@ -108,14 +113,7 @@ app.get("/urls/new", (req, res) => {
 
 // show individual url page
 app.get("/urls/:id", (req, res) => {
-  if (!req.session.user_id) {
-    const templateVars = {
-      error: "Please login to view this URL",
-      user: null,
-    };
-    res.status(401);
-    return res.render("urls_show", templateVars);
-  }
+  // check if shortened url exists
   if (!urlDatabase[req.params.id]) {
     const templateVars = {
       error: "This URL does not exist",
@@ -124,6 +122,16 @@ app.get("/urls/:id", (req, res) => {
     res.status(404);
     return res.render("urls_show", templateVars);
   }
+  // check if user is logged in
+  if (!req.session.user_id) {
+    const templateVars = {
+      error: "Please login to view this URL",
+      user: null,
+    };
+    res.status(403);
+    return res.render("urls_show", templateVars);
+  }
+  // check if user cookie matches id of user who created the short url
   if (req.session.user_id !== urlDatabase[req.params.id].id) {
     const templateVars = {
       error: "You do not have access to this URL",
@@ -143,6 +151,7 @@ app.get("/urls/:id", (req, res) => {
 
 // add redirect link for short url
 app.get("/u/:id", (req, res) => {
+  // check if short url exists
   if (!urlDatabase[req.params.id]) {
     const templateVars = {
       error: "Sorry that shortened URL does not exist",
@@ -173,6 +182,7 @@ app.post("/urls", (req, res) => {
 // add POST for user login
 app.post("/login", (req, res) => {
   const { error, user } = findUserByEmail(req.body, userDatabase);
+  // check if email is already registered
   if (error) {
     const templateVars = { error: error, user: null };
     res.status(401);
@@ -197,6 +207,7 @@ app.post("/register", (req, res) => {
 
 // add route to POST url changes
 app.post("/urls/:id", (req, res) => {
+  // check user id against id of user who created the short url
   if (req.session.user_id !== urlDatabase[req.params.id].id) {
     const templateVars = {
       error: "You do not have access to this URL",
@@ -213,6 +224,7 @@ app.post("/urls/:id", (req, res) => {
 
 // add POST route to delete urls
 app.post("/urls/:id/delete", (req, res) => {
+  // check if user id matches user id that created url
   if (req.session.user_id !== urlDatabase[req.params.id].id) {
     const templateVars = {
       error: "You do not have access to this URL",
