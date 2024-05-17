@@ -41,7 +41,6 @@ const findUserByEmail = function(loginInfo, userDatabase) {
       if (bcrypt.compareSync(loginInfo.password, userDatabase[key].password)) {
         return { error: null, user: userDatabase[key] };
       } else {
-        console.log(loginInfo.password, userDatabase[key].password);
         return { error: 'Incorrect Password', user: null };
       }
     }
