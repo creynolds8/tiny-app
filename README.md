@@ -2,7 +2,7 @@
 
 ## Below are two notes to explain some choices I made in this project 
 
-Note *1*
+### Note *1*
 -I made the choice to return the object for the following reasons:
   -This allowed me to pass specific error messages within the object by
   making the messages the value of the error key
@@ -18,7 +18,7 @@ Note *1*
   case of login and register, allowing the user to try either again without having
   to navigate back to the desired page.
 
-Note *2*
+### Note *2*
 -The reason that these specific lines of the test file have been commented out is as follows:
   -upon testing these routes manually and checking the Developer tools it was
   clear that the status code is 302 indicating a redirect.
@@ -31,7 +31,7 @@ Note *2*
 
   -I spent an hour in a Zoom call with mentor Lovemore Jokonya trying to first
   diagnose then solve this issue
-  
+
   -Unfortunately we could not figure a work around to the test library following
   the redirect and recieving the 'wrong' status code. At this point, we decided 
   that to comment out the problem line of the test and direct here for more info.
